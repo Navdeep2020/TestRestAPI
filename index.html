@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Connect App</title>
+  <script src="https://connect-cdn.atlassian.com/all.js"></script>
+</head>
+<body>
+  <h1>Hello, Jira!</h1>
+  <button id="fetch-projects">Fetch Projects</button>
+  <ul id="project-list"></ul>
+
+  <script>
+    document.getElementById('fetch-projects').addEventListener('click', function () {
+      // Ensure Jira API is loaded
+      AP.request({
+        url: '/rest/api/3/project',
+        type: 'GET',
+        success: function(response) {
+          const projects = JSON.parse(response);
+          const projectList = document.getElementById('project-list');
+          projectList.innerHTML = '';
+          projects.forEach(project => {
+            const li = document.createElement('li');
+            li.textContent = `${project.key}: ${project.name}`;
+            projectList.appendChild(li);
+          });
+        },
+        error: function(err) {
+          console.error('Error fetching projects:', err);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
